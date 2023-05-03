@@ -7,6 +7,7 @@ import argparse
 import torchvision as tv
 from transform_finder import build_transform
 from utils.converters import PilToNumpy, NumpyToPil
+from utils.dataset import CIFAR10NP
 import os
 import numpy as np
 import torch
@@ -42,7 +43,7 @@ def read_corruption_csv(filename):
 def main():
     args = parser.parse_args()
     dataset_path = args.cifar_dir
-    out_dir = os.path.join(args.out_dir, 'CIFAR-10-C-Bar')
+    out_dir = os.path.join(args.out_dir, 'CIFAR-10.2-C-Bar')
     bs = args.batch_size
     if not os.path.exists(out_dir):
         os.mkdir(out_dir)
@@ -60,7 +61,11 @@ def main():
                 PilToNumpy(),
                 build_transform(name=name, severity=severity, dataset_type='cifar'),
                 ])
-            dataset = tv.datasets.CIFAR10(dataset_path, train=False, download=False, transform=transform)
+            dataset = CIFAR10NP(
+                data_path=os.path.join(dataset_path, "data.npy"),
+                label_path=os.path.join(dataset_path, "labels.npy"),
+                transform=transform,
+            )
             loader = torch.utils.data.DataLoader(
                     dataset,
                     shuffle=False,

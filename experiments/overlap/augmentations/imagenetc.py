@@ -749,7 +749,7 @@ class Frost(Augmentation):
         return np.array([params['image_idx']] + list( params['crop_pos']))
 
     def convert_from_numpy(self, numpy_record):
-        return {'image_idx' : int(numpy_record[0]), 'crop_pos' : tuple(numpy_record[1:].astype(np.int).tolist())}
+        return {'image_idx' : int(numpy_record[0]), 'crop_pos' : tuple(numpy_record[1:].astype(np.int_).tolist())}
 
 class DefocusBlur(Augmentation):
 

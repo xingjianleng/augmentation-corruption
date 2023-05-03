@@ -70,7 +70,7 @@ class ChromaticAbberation(Augmentation):
         return params['rgb_shifts'].flatten()
 
     def convert_from_numpy(self, numpy_record):
-        return {'rgb_shifts' : numpy_record.reshape(3,2).astype(np.int)}
+        return {'rgb_shifts' : numpy_record.reshape(3,2).astype(np.int_)}
 
 class TransverseChromaticAbberation(Augmentation):
 

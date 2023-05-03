@@ -60,7 +60,7 @@ class Transform(abc.ABC):
             if isinstance(v, np.ndarray):
                 num = len(v.flatten())
                 data = numpy_record[offset:offset+num]
-                if v.dtype==np.int or v.dtype==np.uint:
+                if v.dtype==np.int_ or v.dtype==np.uint:
                     data = np.round(data, 3)
                 data = data.astype(v.dtype)
                 param_signature[k] = data.reshape(v.shape)

@@ -31,7 +31,7 @@ class CutOut(Augmentation):
         return np.array(params['center'].tolist() + [params['size']])
 
     def convert_from_numpy(self, numpy_record):
-        return {'center' : numpy_record[0:2].astype(np.int), 'size' : numpy_record[2]}
+        return {'center' : numpy_record[0:2].astype(np.int_), 'size' : numpy_record[2]}
     
 '''
 class CheckerBoardCutOut(Augmentation):
@@ -66,7 +66,7 @@ class CheckerBoardCutOut(Augmentation):
         return np.array(params['offset'].tolist() + [params['size']])
 
     def convert_from_numpy(self, numpy_record):
-        return {'offset' : numpy_record[0:2].astype(np.int), 'size' : numpy_record[2].astype(np.int)}
+        return {'offset' : numpy_record[0:2].astype(np.int_), 'size' : numpy_record[2].astype(np.int_)}
 '''
 '''
 class CheckerBoardCutOut(Augmentation):
@@ -164,7 +164,7 @@ class Lines(Augmentation):
                     xc.append(rx)
                     yc.append(ry)
                     val.append(rv)
-            xc, yc, val = np.array(xc, dtype=np.int), np.array(yc, dtype=np.int), np.array(val)
+            xc, yc, val = np.array(xc, dtype=np.int_), np.array(yc, dtype=np.int_), np.array(val)
             out[xc, yc, :] = (1.0 - val.reshape(-1,1)) * out[xc, yc, :].astype(np.float32) + val.reshape(-1,1)*128
         return out.astype(np.uint8)
 

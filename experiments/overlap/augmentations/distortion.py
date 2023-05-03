@@ -301,10 +301,10 @@ class FishEyeV2(Augmentation):
         out = image.copy().astype(np.float32)
         for i in range(num):
             center = random_state.uniform(low=0, high=self.im_size, size=2)
-            l = max(np.floor(center[1]-radius).astype(np.int), 0)
-            r = min(np.ceil(center[1]+radius).astype(np.int), self.im_size)
-            u = max(np.floor(center[0]-radius).astype(np.int), 0)
-            d = min(np.ceil(center[0]+radius).astype(np.int), self.im_size)
+            l = max(np.floor(center[1]-radius).astype(np.int_), 0)
+            r = min(np.ceil(center[1]+radius).astype(np.int_), self.im_size)
+            u = max(np.floor(center[0]-radius).astype(np.int_), 0)
+            d = min(np.ceil(center[0]+radius).astype(np.int_), self.im_size)
             out[u:d,l:r,:] = np.array([[bilinear_interpolation(out, warp_kernel(np.array([y,x]), center, radius, radius, eta)) for x in np.arange(l,r)] for y in np.arange(u,d)])
 
         return np.clip(out, 0, 255).astype(np.uint8)
