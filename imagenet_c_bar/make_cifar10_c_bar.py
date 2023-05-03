@@ -50,10 +50,11 @@ def main():
     file_dir = os.path.dirname(os.path.realpath(__file__))
     corruption_csv = os.path.join(file_dir, 'cifar10_c_bar.csv')
     corruptions = read_corruption_csv(corruption_csv)
+    ds_size = len(tv.datasets.CIFAR10(dataset_path, train=False, download=False))
 
     for name, severities in corruptions.items():
-        data = np.zeros((len(severities)*10000, 32, 32, 3)).astype(np.uint8)
-        labels = np.zeros(len(severities)*10000).astype(np.int_)
+        data = np.zeros((len(severities)*ds_size, 32, 32, 3)).astype(np.uint8)
+        labels = np.zeros(len(severities)*ds_size).astype(np.int_)
         for i, severity in enumerate(severities):
             print("Starting {}-{:.2f}...".format(name, severity))
             transform = tv.transforms.Compose([
@@ -72,11 +73,11 @@ def main():
                     )
             for j, (im, label) in enumerate(loader):
                 if im.size(0)==bs:
-                    data[i*10000+j*bs:i*10000+bs*(j+1),:,:,:] = im.numpy().astype(np.uint8)
-                    labels[i*10000+j*bs:i*10000+bs*(j+1)] = label.numpy()
+                    data[i*ds_size+j*bs:i*ds_size+bs*(j+1),:,:,:] = im.numpy().astype(np.uint8)
+                    labels[i*ds_size+j*bs:i*ds_size+bs*(j+1)] = label.numpy()
                 else:
-                    data[i*10000+j:,:,:,:] = im.numpy().astype(np.uint8)
-                    labels[i*10000+j:] = label.numpy()
+                    data[i*ds_size+j:,:,:,:] = im.numpy().astype(np.uint8)
+                    labels[i*ds_size+j:] = label.numpy()
 
         out_file = os.path.join(out_dir, name + ".npy")
         print("Saving {} to {}.".format(name, out_file))
