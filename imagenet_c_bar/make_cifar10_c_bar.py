@@ -53,9 +53,9 @@ def main():
     ds_size = len(tv.datasets.CIFAR10(dataset_path, train=False, download=False))
 
     for name, severities in corruptions.items():
-        data = np.zeros((len(severities)*ds_size, 32, 32, 3)).astype(np.uint8)
-        labels = np.zeros(len(severities)*ds_size).astype(np.int_)
         for i, severity in enumerate(severities):
+            data = np.zeros((ds_size, 32, 32, 3)).astype(np.uint8)
+            labels = np.zeros(ds_size).astype(np.int_)
             print("Starting {}-{:.2f}...".format(name, severity))
             transform = tv.transforms.Compose([
                 PilToNumpy(),
@@ -73,20 +73,20 @@ def main():
                     )
             for j, (im, label) in enumerate(loader):
                 if im.size(0)==bs:
-                    data[i*ds_size+j*bs:i*ds_size+bs*(j+1),:,:,:] = im.numpy().astype(np.uint8)
-                    labels[i*ds_size+j*bs:i*ds_size+bs*(j+1)] = label.numpy()
+                    data[j*bs:bs*(j+1),:,:,:] = im.numpy().astype(np.uint8)
+                    labels[j*bs:bs*(j+1)] = label.numpy()
                 else:
-                    data[i*ds_size+j:,:,:,:] = im.numpy().astype(np.uint8)
-                    labels[i*ds_size+j:] = label.numpy()
+                    data[j*bs:,:,:,:] = im.numpy().astype(np.uint8)
+                    labels[j*bs:] = label.numpy()
 
-        out_folder = os.path.join(out_dir, name)
-        if not os.path.exists(out_folder):
-            os.mkdir(out_folder)
-        out_file = os.path.join(out_folder, "data.npy")
-        labels_file = os.path.join(out_folder, "labels.npy")
-        print("Saving {} to {}.".format(name, out_file))
-        np.save(out_file, data)
-        np.save(labels_file, labels)
+            out_folder = os.path.join(out_dir, f"{name}_{i + 1}")
+            if not os.path.exists(out_folder):
+                os.mkdir(out_folder)
+            out_file = os.path.join(out_folder, "data.npy")
+            labels_file = os.path.join(out_folder, "labels.npy")
+            print("Saving {} to {}.".format(name, out_file))
+            np.save(out_file, data)
+            np.save(labels_file, labels)
 
 
 
