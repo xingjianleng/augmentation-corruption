@@ -89,12 +89,14 @@ def main():
                     data[i*ds_size+j:,:,:,:] = im.numpy().astype(np.uint8)
                     labels[i*ds_size+j:] = label.numpy()
 
-        out_file = os.path.join(out_dir, name + ".npy")
+        out_folder = os.path.join(out_dir, name)
+        if not os.path.exists(out_folder):
+            os.mkdir(out_folder)
+        out_file = os.path.join(out_folder, "data.npy")
+        labels_file = os.path.join(out_folder, "labels.npy")
         print("Saving {} to {}.".format(name, out_file))
         np.save(out_file, data)
-    
-    labels_file = os.path.join(out_dir, "labels.npy")
-    np.save(labels_file, labels)
+        np.save(labels_file, labels)
 
 
 
